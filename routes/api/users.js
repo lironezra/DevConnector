@@ -1,86 +1,34 @@
 const express = require("express");
 const router = express.Router();
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const { check, validationResult } = require("express-validator");
+const passport = require("passport");
+const { validateBody, schemas } = require("../../helpers/routeHelpers");
+const UserController = require("../../controllers/users");
+const passportConf = require("../../passport"); // loading passport configuration
 
-const User = require("../../models/User");
+const passportSignIn = passport.authenticate("local", { session: false });
+const passportJWT = passport.authenticate("jwt", { session: false });
+const passportFacebook = passport.authenticate("facebooktoken", {
+  session: false,
+});
 
-// @route   POST api/users
-// @desc    Register user
-// @access  PUBLIC
 router.post(
-  "/",
-  [
-    check("name", "Name is required").not().isEmpty(),
-    check("email", "Please include valid email").isEmail(),
-    check(
-      "password",
-      "Please enter a password with 6 or more characters"
-    ).isLength({ min: 6 }),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { name, email, password } = req.body;
-
-    try {
-      // See if user already exists
-      let user = await User.findOne({ email });
-
-      if (user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "User already exsits" }] });
-      }
-
-      // Get user gravatar
-      const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
-      });
-
-      user = new User({
-        name,
-        email,
-        avatar,
-        password,
-      });
-
-      // Encrypt password
-      const salt = await bcrypt.genSalt(10);
-
-      user.password = await bcrypt.hash(password, salt);
-
-      await user.save();
-      // Return JWT
-
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
-
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server erro");
-    }
-  }
+  "/signup",
+  validateBody(schemas.registerSchema),
+  UserController.signUp
 );
+
+router
+  .route("/signin")
+  .post(
+    validateBody(schemas.authSchema),
+    passportSignIn,
+    UserController.signIn
+  );
+
+router.route("/secret").get(passportJWT, UserController.secret);
+
+router
+  .route("/auth/facebook")
+  .post(passportFacebook, UserController.facebookOAuth);
 
 module.exports = router;
