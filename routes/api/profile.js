@@ -1,18 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../../middleware/auth");
-const config = require("config");
-const axios = require("axios");
 const ProfileController = require("../../controllers/profile");
 const { validateBody, schemas } = require("../../helpers/routeHelpers");
-
-const { check, validationResult } = require("express-validator");
-
 const passport = require("passport");
 const passportJWT = passport.authenticate("jwt", { session: false });
-
-const Profile = require("../../models/Profile");
-const User = require("../../models/User");
 
 // @route   GET api/profile/me
 // @desc    Get current users profile
