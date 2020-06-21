@@ -1,45 +1,51 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = mongoose.Schema({
   methods: {
     type: [String],
-    enum: ["local", "facebook"],
-    required: true,
+    enum: ['local', 'facebook'],
+    required: true
+  },
+  name: {
+    type: String
   },
   local: {
-    name: {
-      type: String,
-    },
+    // name: {
+    //   type: String
+    // },
     email: {
       type: String,
-      lowercase: true,
+      lowercase: true
     },
     password: {
-      type: String,
+      type: String
     },
     avatar: {
-      type: String,
+      type: String
     },
     date: {
       type: Date,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   facebook: {
     id: {
-      type: String,
+      type: String
     },
     email: {
       type: String,
-      lowercase: false,
+      lowercase: false
     },
-  },
+    avatar: {
+      type: String
+    }
+  }
 });
 
-UserSchema.pre("save", async function (next) {
+UserSchema.pre('save', async function (next) {
   try {
-    if (!this.methods.includes("local")) {
+    if (!this.methods.includes('local')) {
       next();
     }
     //Generate a salt
@@ -63,4 +69,4 @@ UserSchema.methods.isValidPassword = async function (newPassword) {
   }
 };
 
-module.exports = User = mongoose.model("user", UserSchema);
+module.exports = User = mongoose.model('user', UserSchema);
