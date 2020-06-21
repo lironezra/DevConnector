@@ -1,24 +1,25 @@
-const passport = require("passport");
-const JwtStrategy = require("passport-jwt").Strategy;
-const { ExtractJwt } = require("passport-jwt");
-const LocalStrategy = require("passport-local").Strategy;
-const FacebookTokenStrategy = require("passport-facebook-token");
+const passport = require('passport');
+const gravatar = require('gravatar');
+const JwtStrategy = require('passport-jwt').Strategy;
+const { ExtractJwt } = require('passport-jwt');
+const LocalStrategy = require('passport-local').Strategy;
+const FacebookTokenStrategy = require('passport-facebook-token');
 
-const User = require("./models/User");
+const User = require('./models/User');
 
 const {
   facebookClientId,
   facebookClientSecret,
-  jwtSecret,
-} = require("./config");
+  jwtSecret
+} = require('./config');
 
 // JSON WEB TOKEN STRATEGY
 passport.use(
-  "jwt",
+  'jwt',
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromHeader("authorization"),
-      secretOrKey: jwtSecret,
+      jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+      secretOrKey: jwtSecret
     },
     async (payload, done) => {
       try {
@@ -41,16 +42,16 @@ passport.use(
 
 // LOCAL STRATEGY
 passport.use(
-  "local",
+  'local',
   new LocalStrategy(
     {
-      usernameField: "email",
+      usernameField: 'email'
       // session: false,
     },
     async (email, password, done) => {
       try {
         // Find the user with given email
-        const user = await User.findOne({ "local.email": email });
+        const user = await User.findOne({ 'local.email': email });
 
         // If not, handle it
         if (!user) {
@@ -75,26 +76,52 @@ passport.use(
 );
 
 passport.use(
-  "facebooktoken",
+  'facebooktoken',
   new FacebookTokenStrategy(
     {
       clientID: facebookClientId,
-      clientSecret: facebookClientSecret,
+      clientSecret: facebookClientSecret
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const existingUser = await User.findOne({ "facebook.id": profile.id });
+        console.log('profile: ', profile);
+        const email = profile.emails[0].value;
+        let existingUser = await User.findOne({ 'facebook.id': profile.id });
 
         if (existingUser) {
           return done(null, existingUser);
         }
 
+        // Check if we have someone with same email
+        existingUser = await User.findOne({
+          'local.email': email
+        });
+        if (existingUser) {
+          // merge facebook's data with local auth
+          existingUser.facebook = {
+            id: profile.id,
+            email: email
+          };
+
+          await existingUser.save();
+          return done(null, existingUser);
+        }
+
+        // Get user gravatar
+        const avatar = gravatar.url(email, {
+          s: '200',
+          r: 'pg',
+          d: 'mm'
+        });
+
         const newUser = new User({
-          method: "facebook",
+          method: 'facebook',
+          name: profile._json.name,
           facebook: {
             id: profile.id,
             email: profile.emails[0].value,
-          },
+            avatar
+          }
         });
 
         await newUser.save();
