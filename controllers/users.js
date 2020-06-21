@@ -1,15 +1,15 @@
-const gravatar = require("gravatar");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const gravatar = require('gravatar');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-const { jwtSecret } = require("../config");
+const { jwtSecret } = require('../config');
 
 const signToken = (user) => {
   return jwt.sign(
     {
       user: {
-        id: user.id,
-      },
+        id: user.id
+      }
     },
     jwtSecret,
     { expiresIn: 360000 }
@@ -22,25 +22,26 @@ module.exports = {
 
     try {
       // See if user already exists
-      let newUser = await User.findOne({ "local.email": email });
+      let newUser = await User.findOne({ 'local.email': email });
 
-      if (newUser) return res.status(400).json({ msg: "User already exsits" });
+      if (newUser) return res.status(400).json({ msg: 'User already exsits' });
 
       // Get user gravatar
       const avatar = gravatar.url(email, {
-        s: "200",
-        r: "pg",
-        d: "mm",
+        s: '200',
+        r: 'pg',
+        d: 'mm'
       });
 
       newUser = new User({
-        methods: "local",
+        methods: 'local',
+        name,
         local: {
-          name,
+          // name,
           email,
           avatar,
-          password,
-        },
+          password
+        }
       });
 
       await newUser.save();
@@ -51,7 +52,7 @@ module.exports = {
       return res.status(200).json({ token });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   signIn: async (req, res, next) => {
@@ -61,12 +62,12 @@ module.exports = {
     return res.status(200).json({ token });
   },
   secret: async (req, res, next) => {
-    res.json({ secret: "resource" });
+    res.json({ secret: 'resource' });
   },
   facebookOAuth: async (req, res, next) => {
     // Sign a token
     const token = signToken(req.user);
 
     return res.status(200).json({ token });
-  },
+  }
 };
