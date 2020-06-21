@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
 module.exports = {
   validateBody: (schema) => {
@@ -11,7 +11,7 @@ module.exports = {
       if (!req.value) {
         req.value = {};
       }
-      req.value["body"] = result.value;
+      req.value['body'] = result.value;
       next();
     };
   },
@@ -19,17 +19,17 @@ module.exports = {
   schemas: {
     authSchema: Joi.object().keys({
       email: Joi.string().email().required(),
-      password: Joi.string().min(6).required(),
+      password: Joi.string().min(6).required()
     }),
     registerSchema: Joi.object().keys({
       name: Joi.string().required(),
       email: Joi.string().email().required(),
-      password: Joi.string().min(6).required(),
+      password: Joi.string().min(6).required()
     }),
     profileSchema: Joi.object()
       .keys({
         status: Joi.string().required(),
-        skills: Joi.string().required(),
+        skills: Joi.string().required()
       })
       .unknown(true),
     experienceSchema: Joi.object()
@@ -37,7 +37,7 @@ module.exports = {
         title: Joi.string().required(),
         company: Joi.string().required(),
         from: Joi.date().required(),
-        current: Joi.bool().required(),
+        current: Joi.bool().required()
       })
       .unknown(true),
     educationSchema: Joi.object()
@@ -45,8 +45,14 @@ module.exports = {
         school: Joi.string().required(),
         degree: Joi.string().required(),
         fieldofstudy: Joi.string().required(),
-        from: Joi.date().required(),
+        from: Joi.date().required()
       })
       .unknown(true),
-  },
+    postSchema: Joi.object().keys({
+      text: Joi.string().required()
+    }),
+    commentsSchema: Joi.object().keys({
+      text: Joi.string().required()
+    })
+  }
 };
