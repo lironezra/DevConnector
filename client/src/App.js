@@ -13,12 +13,12 @@ const App = () => (
     <>
       <Navbar />
       <Route exact path='/' component={LandingPage} />
-      <Switch>
-        <section className='container'>
+      <section className='container'>
+        <Switch>
           <Route exact path='/login' component={Login} />
           <Route exact path='/register' component={Register} />
-        </section>
-      </Switch>
+        </Switch>
+      </section>
     </>
   </Router>
 );
