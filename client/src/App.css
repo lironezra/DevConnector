@@ -5,6 +5,7 @@
   --light-color: #e9d6d6;
   --danger-color: #dc3545;
   --success-color: #28a745;
+  --facebook-color: #3b5998;
 }
 
 * {
@@ -203,6 +204,18 @@ img {
   background: #fff;
   color: #333;
   border: #ccc solid 1px;
+}
+
+.btn-facebook {
+  background: var(--facebook-color);
+  color: white;
+}
+
+.fb-icon {
+  height: 17px;
+  width: 17px;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
 .btn:hover {

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import facebookIcon from '../../assets/images/facebook-32.png';
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -44,6 +46,10 @@ const Login = () => {
           />
         </div>
         <input type='submit' className='btn btn-primary' value='Login' />
+        <button type='submit' className='btn btn-facebook'>
+          <img src={facebookIcon} className='fb-icon' alt='fb-logo' />
+          Login with facebook
+        </button>
       </form>
       <p className='my-1'>
         Don't have an account? <Link to='/register'>Sign In</Link>
