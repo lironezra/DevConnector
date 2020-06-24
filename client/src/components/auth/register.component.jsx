@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { setAlert } from '../../redux/alerts/alerts.actions';
+import { displayAlert } from '../../redux/alerts/alerts.actions';
+import { signUp } from '../../redux/auth/auth.actions';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -21,9 +22,15 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== password2) {
-      dispatch(setAlert('passwords do not match', 'danger'));
+      dispatch(displayAlert('passwords do not match', 'danger'));
     } else {
-      console.log('SUCCESS');
+      dispatch(
+        signUp({
+          name,
+          email,
+          password
+        })
+      );
     }
   };
   return (
@@ -40,7 +47,6 @@ const Register = () => {
             name='name'
             value={name}
             onChange={handleChange}
-            required
           />
         </div>
         <div className='form-group'>
@@ -50,7 +56,6 @@ const Register = () => {
             name='email'
             value={email}
             onChange={handleChange}
-            required
           />
           <small className='form-text'>
             This site uses Gravatar so if you want a profile image, use a
@@ -62,7 +67,6 @@ const Register = () => {
             type='password'
             placeholder='Password'
             name='password'
-            minLength='6'
             value={password}
             onChange={handleChange}
           />
@@ -72,7 +76,6 @@ const Register = () => {
             type='password'
             placeholder='Confirm Password'
             name='password2'
-            minLength='6'
             value={password2}
             onChange={handleChange}
           />
