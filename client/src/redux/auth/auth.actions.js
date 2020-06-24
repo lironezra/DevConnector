@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { displayAlert } from '../alerts/alerts.actions';
+import setAuthToken from '../../utils/setAuthToken';
 import * as actionTypes from './auth.types';
 
 const registerSuccess = (data) => {
@@ -13,6 +14,32 @@ const registerFail = () => {
   return {
     type: actionTypes.REGISTER_FAIL
   };
+};
+
+const userLoaded = (user) => {
+  return {
+    type: actionTypes.USER_LOADED,
+    payload: user
+  };
+};
+
+const authError = () => {
+  return {
+    type: actionTypes.AUTH_ERROR
+  };
+};
+
+export const loadUser = () => async (dispatch) => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+
+  try {
+    const res = await axios.get('/api/users/secret');
+    dispatch(userLoaded(res.data));
+  } catch (err) {
+    dispatch(authError());
+  }
 };
 
 export const signUp = ({ name, email, password }) => async (dispatch) => {
