@@ -62,7 +62,16 @@ module.exports = {
     return res.status(200).json({ token });
   },
   secret: async (req, res, next) => {
-    res.json({ secret: 'resource' });
+    try {
+      const user = await User.findById(req.user.id).select({
+        'local.password': 0
+      });
+      res.status(200).json(user);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+    // res.json({ secret: 'resource' });
   },
   facebookOAuth: async (req, res, next) => {
     // Sign a token

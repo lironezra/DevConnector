@@ -10,7 +10,9 @@ const { githubToken } = require('../config');
 module.exports = {
   createPost: async (req, res) => {
     try {
-      const user = await User.findById(req.user.id).select('--password');
+      const user = await User.findById(req.user.id).select({
+        'local.password': 0
+      });
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
@@ -132,7 +134,9 @@ module.exports = {
   },
   commentOnPost: async (req, res) => {
     try {
-      const user = await User.findById(req.user.id).select('--password');
+      const user = await User.findById(req.user.id).select({
+        'local.password': 0
+      });
       const post = await Post.findById(req.params.id);
 
       const newComment = {
