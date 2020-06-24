@@ -5,7 +5,7 @@ module.exports = {
     return (req, res, next) => {
       const result = Joi.validate(req.body, schema, { abortEarly: false });
       if (result.error) {
-        return res.status(400).json(result.error);
+        return res.status(400).json(result.error.details);
       }
 
       if (!req.value) {
