@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { displayAlert } from '../../redux/alerts/alerts.actions';
 import { signUp } from '../../redux/auth/auth.actions';
 
 const Register = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
@@ -33,6 +34,12 @@ const Register = () => {
       );
     }
   };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
+
   return (
     <>
       <h1 className='large text-primary'>Sign Up</h1>

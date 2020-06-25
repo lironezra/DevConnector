@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { login } from '../../redux/auth/auth.actions';
 
 import facebookIcon from '../../assets/images/facebook-32.png';
 
 const Login = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -16,8 +20,14 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('SUCCESS');
+    dispatch(login(formData));
   };
+
+  // Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
+
   return (
     <>
       <h1 className='large text-primary'>Sign In</h1>
@@ -32,7 +42,6 @@ const Login = () => {
             name='email'
             value={email}
             onChange={handleChange}
-            required
           />
         </div>
         <div className='form-group'>
@@ -40,7 +49,6 @@ const Login = () => {
             type='password'
             placeholder='Password'
             name='password'
-            minLength='6'
             value={password}
             onChange={handleChange}
           />
