@@ -12,7 +12,7 @@ const signToken = (user) => {
       }
     },
     jwtSecret,
-    { expiresIn: 360000 }
+    { expiresIn: 3600 }
   );
 };
 
