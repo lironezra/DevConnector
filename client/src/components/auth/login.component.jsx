@@ -17,7 +17,7 @@ const Login = () => {
   const { email, password } = formData;
 
   useEffect(() => {
-    inputRef.current.focus();
+    inputRef.current && inputRef.current.focus();
   }, []);
 
   const handleChange = (e) =>

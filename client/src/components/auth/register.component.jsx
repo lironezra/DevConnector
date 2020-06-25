@@ -19,7 +19,7 @@ const Register = () => {
 
   useEffect(() => {
     // current property is refered to input element
-    inputRef.current.focus();
+    inputRef.current && inputRef.current.focus();
   }, []);
 
   const handleChange = (e) =>
