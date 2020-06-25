@@ -42,6 +42,13 @@ const authError = () => {
   };
 };
 
+const logoutUser = () => {
+  return {
+    type: actionTypes.LOGOUT
+  };
+};
+
+// Load user - Get the user after getting the token from server
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -105,4 +112,9 @@ export const login = ({ email, password }) => async (dispatch) => {
     }
     dispatch(loginFail());
   }
+};
+
+// Logout / Clear profile
+export const logout = () => (dispatch) => {
+  dispatch(logoutUser());
 };
