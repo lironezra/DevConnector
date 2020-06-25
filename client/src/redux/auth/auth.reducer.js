@@ -19,6 +19,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         user: payload
       };
     case actionTypes.REGISTER_SUCCESS:
+    case actionTypes.LOGIN_SUCCES:
       localStorage.setItem('token', payload.token);
       return {
         ...state,
@@ -28,6 +29,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       };
     case actionTypes.AUTH_ERROR:
     case actionTypes.REGISTER_FAIL:
+    case actionTypes.LOGIN_FAIL:
       localStorage.removeItem('token');
       return {
         ...state,
@@ -35,6 +37,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         isAuthenticated: false,
         loading: false
       };
+
     default:
       return state;
   }

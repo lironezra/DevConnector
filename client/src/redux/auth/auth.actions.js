@@ -16,6 +16,19 @@ const registerFail = () => {
   };
 };
 
+const loginSuccess = (data) => {
+  return {
+    type: actionTypes.LOGIN_SUCCES,
+    payload: data
+  };
+};
+
+const loginFail = (data) => {
+  return {
+    type: actionTypes.LOGIN_FAIL
+  };
+};
+
 const userLoaded = (user) => {
   return {
     type: actionTypes.USER_LOADED,
@@ -42,6 +55,7 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
+// Register user
 export const signUp = ({ name, email, password }) => async (dispatch) => {
   const config = {
     headers: {
@@ -55,6 +69,7 @@ export const signUp = ({ name, email, password }) => async (dispatch) => {
     const res = await axios.post('/api/users/signup', body, config);
 
     dispatch(registerSuccess(res.data));
+    dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data;
 
@@ -64,5 +79,30 @@ export const signUp = ({ name, email, password }) => async (dispatch) => {
       );
     }
     dispatch(registerFail());
+  }
+};
+
+// Login User
+export const login = ({ email, password }) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ email, password });
+
+  try {
+    const res = await axios.post('/api/users/signin', body, config);
+
+    dispatch(loginSuccess(res.data));
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data;
+
+    if (errors && errors === 'Unauthorized') {
+      dispatch(displayAlert('Invalid Credentials', 'danger'));
+    }
+    dispatch(loginFail());
   }
 };
