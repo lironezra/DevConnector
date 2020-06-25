@@ -10,10 +10,10 @@ const Navbar = () => {
   const authLinks = (
     <ul>
       <li>
-        <a onClick={() => dispatch(logout())} to='#!'>
+        <Link onClick={() => dispatch(logout())} to='/'>
           <i className='fas fa-sign-out-alt'> </i>
           <span className='hide-sm'>Logout</span>
-        </a>
+        </Link>
       </li>
     </ul>
   );
