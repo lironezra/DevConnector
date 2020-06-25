@@ -1,4 +1,5 @@
 import * as actionTypes from './profile.types';
+import * as authActionTypes from '../auth/auth.types';
 
 const INITIAL_STATE = {
   profile: null,
@@ -22,6 +23,13 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: payload,
+        loading: false
+      };
+    case authActionTypes.CLEAR_PROFILE:
+      return {
+        ...state,
+        profile: null,
+        repos: [],
         loading: false
       };
     default:

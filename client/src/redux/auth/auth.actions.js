@@ -48,6 +48,12 @@ const logoutUser = () => {
   };
 };
 
+const clearProfile = () => {
+  return {
+    type: actionTypes.CLEAR_PROFILE
+  };
+};
+
 // Load user - Get the user after getting the token from server
 export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
@@ -124,4 +130,5 @@ export const login = ({ email, password }) => async (dispatch) => {
 // Logout / Clear profile
 export const logout = () => (dispatch) => {
   dispatch(logoutUser());
+  dispatch(clearProfile());
 };
