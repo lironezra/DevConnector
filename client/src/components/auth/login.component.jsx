@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { login } from '../../redux/auth/auth.actions';
@@ -6,6 +6,7 @@ import { login } from '../../redux/auth/auth.actions';
 import facebookIcon from '../../assets/images/facebook-32.png';
 
 const Login = () => {
+  const inputRef = useRef(null);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -14,6 +15,10 @@ const Login = () => {
   });
 
   const { email, password } = formData;
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,6 +47,7 @@ const Login = () => {
             name='email'
             value={email}
             onChange={handleChange}
+            ref={inputRef}
           />
         </div>
         <div className='form-group'>

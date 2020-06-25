@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { displayAlert } from '../../redux/alerts/alerts.actions';
 import { signUp } from '../../redux/auth/auth.actions';
 
 const Register = () => {
+  const inputRef = useRef(null);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -15,6 +16,11 @@ const Register = () => {
   });
 
   const { name, email, password, password2 } = formData;
+
+  useEffect(() => {
+    // current property is refered to input element
+    inputRef.current.focus();
+  }, []);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -54,6 +60,7 @@ const Register = () => {
             name='name'
             value={name}
             onChange={handleChange}
+            ref={inputRef}
           />
         </div>
         <div className='form-group'>
