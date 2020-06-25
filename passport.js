@@ -53,17 +53,15 @@ passport.use(
         // Find the user with given email
         const user = await User.findOne({ 'local.email': email });
 
-        // If not, handle it
         if (!user) {
-          return done(null, false);
+          return done(null, false); // return Unautorized to the client
         }
 
         // Check if the password is correct
         const isMatch = await user.isValidPassword(password);
 
-        // If not, handle it
         if (!isMatch) {
-          return done(null, false);
+          return done(null, false); // return Unautorized to the client
         }
 
         // Otherwise return the user
@@ -84,7 +82,6 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log('profile: ', profile);
         const email = profile.emails[0].value;
         let existingUser = await User.findOne({ 'facebook.id': profile.id });
 
@@ -94,7 +91,7 @@ passport.use(
 
         // Check if we have someone with same email
         existingUser = await User.findOne({
-          'local.email': email
+          $or: [{ 'local.email': email }, { 'facebook.email': email }]
         });
         if (existingUser) {
           // merge facebook's data with local auth
@@ -115,7 +112,7 @@ passport.use(
         });
 
         const newUser = new User({
-          method: 'facebook',
+          methods: 'facebook',
           name: profile._json.name,
           facebook: {
             id: profile.id,
@@ -125,6 +122,7 @@ passport.use(
         });
 
         await newUser.save();
+        console.log(newUser);
         return done(null, newUser);
       } catch (err) {
         done(err, false, err.message);
