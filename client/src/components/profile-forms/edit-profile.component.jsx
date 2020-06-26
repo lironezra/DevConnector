@@ -1,9 +1,28 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import { createOrUpdateProfile } from '../../redux/profile/profile.actions';
+import {
+  createOrUpdateProfile,
+  getCurrentProfile
+} from '../../redux/profile/profile.actions';
 
-const CreateProfile = ({ history }) => {
+const initialState = {
+  company: '',
+  website: '',
+  location: '',
+  status: '',
+  skills: '',
+  githubusername: '',
+  bio: '',
+  twitter: '',
+  facebook: '',
+  linkedin: '',
+  youtube: '',
+  instagram: ''
+};
+
+const EditProfile = ({ history }) => {
+  const { profile, loading } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     company: '',
@@ -20,6 +39,23 @@ const CreateProfile = ({ history }) => {
     instagram: ''
   });
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
+
+  useEffect(() => {
+    if (!profile) dispatch(getCurrentProfile());
+
+    if (!loading && profile) {
+      const profileData = { ...initialState };
+      for (const key in profile) {
+        if (key in profileData) profileData[key] = profile[key];
+      }
+      for (const key in profile.social) {
+        if (key in profileData) profileData[key] = profile.social[key];
+      }
+      if (Array.isArray(profileData.skills))
+        profileData.skills = profileData.skills.join(', ');
+      setFormData(profileData);
+    }
+  }, [loading, profile]);
 
   const {
     company,
@@ -41,12 +77,12 @@ const CreateProfile = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createOrUpdateProfile(formData, history));
+    dispatch(createOrUpdateProfile(formData, history, true));
   };
 
   return (
     <>
-      <h1 className='large text-primary'>Create Your Profile</h1>
+      <h1 className='large text-primary'>Edit Your Profile</h1>
       <p className='lead'>
         <i className='fas fa-user'></i> Let's get some information to make your
         profile stand out
@@ -225,4 +261,4 @@ const CreateProfile = ({ history }) => {
   );
 };
 
-export default withRouter(CreateProfile);
+export default withRouter(EditProfile);
