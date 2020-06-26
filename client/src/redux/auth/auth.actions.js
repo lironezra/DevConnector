@@ -113,7 +113,6 @@ export const login = ({ email, password }) => async (dispatch) => {
   } catch (err) {
     const errors = err.response.data;
 
-    console.log(errors);
     if (errors === 'Unauthorized') {
       dispatch(displayAlert('Invalid Credentials', 'danger'));
     } else {

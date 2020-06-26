@@ -14,6 +14,7 @@ const reducer = (state = INITIAL_STATE, action) => {
 
   switch (type) {
     case actionTypes.GET_PROFILE_SUCCESS:
+    case actionTypes.UPDATE_PROFILE:
       return {
         ...state,
         profile: payload,

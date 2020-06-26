@@ -10,6 +10,9 @@ import Alert from './components/layout/alert/alert.component';
 import Dashboard from './components/dashboard/dashboard.component';
 import CreateProfile from './components/profile-forms/create-profile.component';
 import EditProfile from './components/profile-forms/edit-profile.component';
+import AddExperience from './components/profile-forms/add-experience.component';
+import AddEducation from './components/profile-forms/add-education.component';
+
 //Redux
 import { Provider } from 'react-redux';
 import store from './redux/store';
@@ -48,6 +51,16 @@ const App = () => {
                 exact
                 path='/edit-profile'
                 component={EditProfile}
+              />
+              <PrivateRoute
+                exact
+                path='/add-experience'
+                component={AddExperience}
+              />
+              <PrivateRoute
+                exact
+                path='/add-education'
+                component={AddEducation}
               />
             </Switch>
           </section>

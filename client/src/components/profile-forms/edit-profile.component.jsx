@@ -24,20 +24,7 @@ const initialState = {
 const EditProfile = ({ history }) => {
   const { profile, loading } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    company: '',
-    website: '',
-    location: '',
-    status: '',
-    skills: '',
-    githubusername: '',
-    bio: '',
-    youtube: '',
-    twitter: '',
-    facebook: '',
-    linkedin: '',
-    instagram: ''
-  });
+  const [formData, setFormData] = useState(initialState);
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
 
   useEffect(() => {
