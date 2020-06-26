@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import { createOrUpdateProfile } from '../../redux/profile/profile.actions';
+import { createProfile } from '../../redux/profile/profile.actions';
 
 const CreateProfile = ({ history }) => {
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const CreateProfile = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createOrUpdateProfile(formData, history));
+    dispatch(createProfile(formData, history));
   };
 
   return (

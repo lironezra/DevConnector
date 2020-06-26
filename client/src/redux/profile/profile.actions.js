@@ -16,6 +16,7 @@ const profileError = (error) => {
     payload: error
   };
 };
+
 // Get the current user profile
 export const getCurrentProfile = () => async (dispatch) => {
   try {
@@ -31,11 +32,10 @@ export const getCurrentProfile = () => async (dispatch) => {
   }
 };
 
-export const createOrUpdateProfile = (
-  formdata,
-  history,
-  edit = false
-) => async (dispatch) => {
+// Create or Update Profile
+export const createProfile = (formdata, history, edit = false) => async (
+  dispatch
+) => {
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -70,3 +70,5 @@ export const createOrUpdateProfile = (
     );
   }
 };
+
+// Add

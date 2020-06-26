@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import {
-  createOrUpdateProfile,
+  createProfile,
   getCurrentProfile
 } from '../../redux/profile/profile.actions';
 
@@ -77,7 +77,7 @@ const EditProfile = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createOrUpdateProfile(formData, history, true));
+    dispatch(createProfile(formData, history, true));
   };
 
   return (
