@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { getCurrentProfile } from '../../redux/profile/profile.actions';
 
 import DashboardActins from './dashboard-actions.component';
+import Experience from './experience.component';
+import Education from './education.component';
 import Spinner from '../layout/spinner/spinner.component';
 
 const Dashboard = () => {
@@ -27,6 +29,8 @@ const Dashboard = () => {
       {profile !== null ? (
         <>
           <DashboardActins />
+          <Experience experience={profile.experience} />
+          <Education education={profile.education} />
         </>
       ) : (
         <>

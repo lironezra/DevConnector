@@ -79,6 +79,10 @@ img {
   color: var(--danger-color);
 }
 
+.text-success {
+  color: var(--success-color);
+}
+
 /* Padding */
 .p {
   padding: 0.5rem;
