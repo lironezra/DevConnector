@@ -1,9 +1,11 @@
-const axios = require("axios");
-const gravatar = require("gravatar");
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const axios = require('axios');
+const gravatar = require('gravatar');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const Post = require('../models/Post');
+const Profile = require('../models/Profile');
 
-const { githubToken } = require("../config");
+const { githubToken } = require('../config');
 
 module.exports = {
   upsertUserProfile: async (req, res) => {
@@ -19,20 +21,20 @@ module.exports = {
       twitter,
       instagram,
       linkedin,
-      facebook,
+      facebook
     } = req.body;
 
     const profileFields = {
       user: req.user.id,
       company,
       location,
-      website: website === "" ? "" : website,
+      website: website === '' ? '' : website,
       bio,
       skills: Array.isArray(skills)
         ? skills
-        : skills.split(",").map((skill) => skill.trim()),
+        : skills.split(',').map((skill) => skill.trim()),
       status,
-      githubusername,
+      githubusername
     };
 
     // Build social object and add to profileFields
@@ -54,56 +56,56 @@ module.exports = {
       res.status(200).json(profile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   getAuthenticatedUserProfile: async (req, res) => {
     try {
       const profile = await Profile.findOne({
-        user: req.user.id,
-      }).populate("user", ["name", "avatar"]);
+        user: req.user.id
+      }).populate('user', ['name', 'avatar']);
 
       if (!profile) {
         return res
           .status(400)
-          .json({ msg: "There is no profile for this user" });
+          .json({ msg: 'There is no profile for this user' });
       }
 
       res.status(200).json(profile);
     } catch (err) {
       console.error(error.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   getAllProfiles: async (req, res) => {
     try {
-      const profiles = await Profile.find().populate("user", [
-        "name",
-        "avatar",
+      const profiles = await Profile.find().populate('user', [
+        'name',
+        'avatar'
       ]);
       res.status(200).json(profiles);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   getProfileByUserId: async (req, res) => {
     try {
       const profile = await Profile.findOne({
-        user: req.params.user_id,
-      }).populate("user", ["name", "avatar"]);
+        user: req.params.user_id
+      }).populate('user', ['name', 'avatar']);
 
-      if (!profile) return res.status(400).json({ msg: "Profile not found" });
+      if (!profile) return res.status(400).json({ msg: 'Profile not found' });
 
       res.status(200).json(profile);
     } catch (err) {
       console.error(err.message);
 
-      if (err.kind == "ObjectId") {
-        return res.status(400).json({ msg: "Profile not found" });
+      if (err.kind == 'ObjectId') {
+        return res.status(400).json({ msg: 'Profile not found' });
       }
 
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   getGithubUserRepositories: async (req, res) => {
@@ -112,8 +114,8 @@ module.exports = {
         `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`
       );
       const headers = {
-        "user-agent": "node.js",
-        Authorization: `token ${githubToken}`,
+        'user-agent': 'node.js',
+        Authorization: `token ${githubToken}`
       };
 
       const gitHubResponse = await axios.get(uri, { headers });
@@ -121,7 +123,7 @@ module.exports = {
       return res.json(gitHubResponse.data);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   addProfileExperience: async (req, res) => {
@@ -132,7 +134,7 @@ module.exports = {
       from,
       to,
       current,
-      description,
+      description
     } = req.body;
 
     const newExp = {
@@ -142,7 +144,7 @@ module.exports = {
       from,
       to,
       current,
-      description,
+      description
     };
 
     try {
@@ -156,7 +158,7 @@ module.exports = {
       res.json(profile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   },
   addProfileEducation: async (req, res) => {
@@ -167,7 +169,7 @@ module.exports = {
       from,
       to,
       current,
-      description,
+      description
     } = req.body;
 
     const newEducation = {
@@ -177,7 +179,7 @@ module.exports = {
       from,
       to,
       current,
-      description,
+      description
     };
 
     try {
@@ -191,24 +193,27 @@ module.exports = {
       res.status(200).json(profile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   },
   deleteProfile: async (req, res) => {
     try {
+      // Remove user posts
+      await Post.deleteMany({ user: req.user.id });
+
       // Remove profile
       await Profile.findOneAndRemove({ user: req.user.id });
 
       // Remove user
-      //await User.findOneAndRemove({ _id: req.user.id });
+      await User.findOneAndRemove({ _id: req.user.id });
 
       res.status(200).json({
         msg:
-          "Profile deleted, but you can create another profile if you want :)",
+          'Profile deleted, but you can create another profile if you want :)'
       });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   deleteExperienceFromProfile: async (req, res) => {
@@ -224,7 +229,7 @@ module.exports = {
       return res.status(200).json(foundProfile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
   },
   deleteEducationFromProfile: async (req, res) => {
@@ -240,7 +245,7 @@ module.exports = {
       return res.status(200).json(foundProfile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
-  },
+  }
 };

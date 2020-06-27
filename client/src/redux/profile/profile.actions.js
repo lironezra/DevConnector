@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { displayAlert } from '../alerts/alerts.actions';
+import { accountDeleted } from '../auth/auth.actions';
 
 import * as actionTypes from './profile.types';
 
@@ -21,6 +22,12 @@ const profileError = (error) => {
   return {
     type: actionTypes.PROFILE_ERROR,
     payload: error
+  };
+};
+
+export const clearProfile = () => {
+  return {
+    type: actionTypes.CLEAR_PROFILE
   };
 };
 
@@ -141,5 +148,60 @@ export const addEducation = (formData, history) => async (dispatch) => {
         status: err.response.status
       })
     );
+  }
+};
+
+// Delete experience
+export const deleteExperience = (id) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/profile/experience/${id}`);
+
+    dispatch(updateProfile(res.data));
+    dispatch(displayAlert('Experience Removed', 'success'));
+  } catch (err) {
+    dispatch(
+      profileError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Delete education
+export const deleteEducation = (id) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/profile/education/${id}`);
+
+    dispatch(updateProfile(res.data));
+    dispatch(displayAlert('Education Removed', 'success'));
+  } catch (err) {
+    dispatch(
+      profileError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Delete Account
+export const deleteAccount = () => async (dispatch) => {
+  if (window.confirm('Aru you sure? This can NOT be undone!')) {
+    try {
+      await axios.delete(`/api/profile`);
+
+      dispatch(clearProfile());
+      dispatch(accountDeleted());
+
+      dispatch(displayAlert('Your account has been permanently deleted'));
+    } catch (err) {
+      dispatch(
+        profileError({
+          msg: err.response.statusText,
+          status: err.response.status
+        })
+      );
+    }
   }
 };

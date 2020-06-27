@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { displayAlert } from '../alerts/alerts.actions';
+import { clearProfile } from '../profile/profile.actions';
 import setAuthToken from '../../utils/setAuthToken';
 import * as actionTypes from './auth.types';
 
@@ -48,9 +49,15 @@ const logoutUser = () => {
   };
 };
 
-const clearProfile = () => {
+// export const clearProfile = () => {
+//   return {
+//     type: actionTypes.CLEAR_PROFILE
+//   };
+// };
+
+export const accountDeleted = () => {
   return {
-    type: actionTypes.CLEAR_PROFILE
+    type: actionTypes.ACCOUNT_DELETED
   };
 };
 

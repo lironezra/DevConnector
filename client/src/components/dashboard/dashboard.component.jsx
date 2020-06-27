@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getCurrentProfile } from '../../redux/profile/profile.actions';
+import {
+  getCurrentProfile,
+  deleteAccount
+} from '../../redux/profile/profile.actions';
 
 import DashboardActins from './dashboard-actions.component';
 import Experience from './experience.component';
@@ -31,6 +34,15 @@ const Dashboard = () => {
           <DashboardActins />
           <Experience experience={profile.experience} />
           <Education education={profile.education} />
+
+          <div className='my-2'>
+            <button
+              className='btn btn-danger'
+              onClick={() => dispatch(deleteAccount())}
+            >
+              <i className='fas fa-user-minus' /> Delete My Account
+            </button>
+          </div>
         </>
       ) : (
         <>
