@@ -42,7 +42,7 @@ const EditProfile = ({ history }) => {
         profileData.skills = profileData.skills.join(', ');
       setFormData(profileData);
     }
-  }, [loading, profile]);
+  }, [dispatch, loading, profile]);
 
   const {
     company,

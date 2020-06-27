@@ -11,7 +11,7 @@ const Profiles = () => {
 
   useEffect(() => {
     dispatch(getAllProfiles());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
