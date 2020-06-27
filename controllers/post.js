@@ -16,7 +16,7 @@ module.exports = {
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
-        avatar: user.local.avatar ? user.local.avatar : user.facebook.avatar,
+        avatar: user.avatar,
         user: req.user.id
       });
 
@@ -142,7 +142,7 @@ module.exports = {
       const newComment = {
         text: req.body.text,
         name: user.name,
-        avatar: user.local.avatar ? user.local.avatar : user.facebook.avatar,
+        avatar: user.avatar,
         user: req.user.id
       };
 

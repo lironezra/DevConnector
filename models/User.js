@@ -10,6 +10,9 @@ const UserSchema = mongoose.Schema({
   name: {
     type: String
   },
+  avatar: {
+    type: String
+  },
   local: {
     // name: {
     //   type: String
@@ -19,9 +22,6 @@ const UserSchema = mongoose.Schema({
       lowercase: true
     },
     password: {
-      type: String
-    },
-    avatar: {
       type: String
     },
     date: {
@@ -36,9 +36,6 @@ const UserSchema = mongoose.Schema({
     email: {
       type: String,
       lowercase: false
-    },
-    avatar: {
-      type: String
     }
   }
 });

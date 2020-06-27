@@ -114,10 +114,10 @@ passport.use(
         const newUser = new User({
           methods: 'facebook',
           name: profile._json.name,
+          avatar,
           facebook: {
             id: profile.id,
-            email: profile.emails[0].value,
-            avatar
+            email: profile.emails[0].value
           }
         });
 

@@ -36,10 +36,9 @@ module.exports = {
       newUser = new User({
         methods: 'local',
         name,
+        avatar,
         local: {
-          // name,
           email,
-          avatar,
           password
         }
       });
