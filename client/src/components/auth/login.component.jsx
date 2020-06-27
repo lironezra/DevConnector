@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { login } from '../../redux/auth/auth.actions';
 
-import facebookIcon from '../../assets/images/facebook-32.png';
-
 const Login = () => {
   const inputRef = useRef(null);
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -60,11 +58,10 @@ const Login = () => {
           />
         </div>
         <input type='submit' className='btn btn-primary' value='Login' />
-        <button type='submit' className='btn btn-facebook'>
-          <img src={facebookIcon} className='fb-icon' alt='fb-logo' />
-          Login with facebook
-        </button>
       </form>
+      <button className='btn btn-facebook mt-10'>
+        <i class='fab fa-facebook-f mr-5'></i> Login with facebook
+      </button>
       <p className='my-1'>
         Don't have an account? <Link to='/register'>Sign Up</Link>
       </p>
