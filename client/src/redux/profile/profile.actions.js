@@ -4,10 +4,24 @@ import { accountDeleted } from '../auth/auth.actions';
 
 import * as actionTypes from './profile.types';
 
-const getProfile = (profileData) => {
+const getProfileSuccess = (profileData) => {
   return {
     type: actionTypes.GET_PROFILE_SUCCESS,
     payload: profileData
+  };
+};
+
+const getProfilesSuccess = (profiles) => {
+  return {
+    type: actionTypes.GET_PROFILES_SUCCESS,
+    payload: profiles
+  };
+};
+
+const getReposSuccess = (repos) => {
+  return {
+    type: actionTypes.GET_REPOS_SUCCESS,
+    payload: repos
   };
 };
 
@@ -35,7 +49,54 @@ export const clearProfile = () => {
 export const getCurrentProfile = () => async (dispatch) => {
   try {
     const res = await axios.get('/api/profile/me');
-    dispatch(getProfile(res.data));
+    dispatch(getProfileSuccess(res.data));
+  } catch (err) {
+    dispatch(
+      profileError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Get all Profiles
+export const getAllProfiles = () => async (dispatch) => {
+  dispatch(clearProfile());
+
+  try {
+    const res = await axios.get('/api/profile');
+    dispatch(getProfilesSuccess(res.data));
+  } catch (err) {
+    dispatch(
+      profileError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Get profile by ID
+export const getProfileById = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/user/${userId}`);
+    dispatch(getProfileSuccess(res.data));
+  } catch (err) {
+    dispatch(
+      profileError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Get Github repos
+export const getGithubRepos = (username) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/profile/github/${username}`);
+    dispatch(getReposSuccess(res.data));
   } catch (err) {
     dispatch(
       profileError({
@@ -59,7 +120,7 @@ export const createProfile = (formdata, history, edit = false) => async (
   try {
     const res = await axios.post('/api/profile', formdata, config);
 
-    dispatch(getProfile(res.data));
+    dispatch(getProfileSuccess(res.data));
     dispatch(
       displayAlert(edit ? 'Profile Updated' : 'Profile Created', 'success')
     );
