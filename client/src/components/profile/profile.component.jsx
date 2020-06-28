@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-
 import { getProfileById } from '../../redux/profile/profile.actions';
 
 import Spinner from '../layout/spinner/spinner.component';
 import ProfileTop from './profile-top.component';
 import ProfileAbout from './profile-about.component';
+import ProfileExperience from './profile-experience.component';
+import ProfileEducation from './profile-education.component';
 
 const Profile = ({ match }) => {
   const dispatch = useDispatch();
@@ -41,6 +42,34 @@ const Profile = ({ match }) => {
           <div className='profile-grid my-1'>
             <ProfileTop profile={profile} />
             <ProfileAbout profile={profile} />
+            <div className='profile-exp bg-white p-2'>
+              <h2 className='text-primary'>Experience</h2>
+              <div>
+                {profile.experience.length > 0 ? (
+                  <>
+                    {profile.experience.map((exp) => (
+                      <ProfileExperience key={exp._id} experience={exp} />
+                    ))}
+                  </>
+                ) : (
+                  <h4>No experience credentials</h4>
+                )}
+              </div>
+            </div>
+            <div className='profile-edu bg-white p-2'>
+              <h2 className='text-primary'>Education</h2>
+              <div>
+                {profile.education.length > 0 ? (
+                  <>
+                    {profile.education.map((edu) => (
+                      <ProfileEducation key={edu._id} education={edu} />
+                    ))}
+                  </>
+                ) : (
+                  <h4>No experience credentials</h4>
+                )}
+              </div>
+            </div>
           </div>
         </>
       )}
