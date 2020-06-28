@@ -60,7 +60,7 @@ const Login = () => {
         <input type='submit' className='btn btn-primary' value='Login' />
       </form>
       <button className='btn btn-facebook mt-10'>
-        <i class='fab fa-facebook-f mr-5'></i> Login with facebook
+        <i className='fab fa-facebook-f mr-5'></i> Login with facebook
       </button>
       <p className='my-1'>
         Don't have an account? <Link to='/register'>Sign Up</Link>
