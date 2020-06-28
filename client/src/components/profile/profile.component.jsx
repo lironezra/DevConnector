@@ -8,6 +8,7 @@ import ProfileTop from './profile-top.component';
 import ProfileAbout from './profile-about.component';
 import ProfileExperience from './profile-experience.component';
 import ProfileEducation from './profile-education.component';
+import ProfileGithub from './profile-github.component';
 
 const Profile = ({ match }) => {
   const dispatch = useDispatch();
@@ -69,6 +70,17 @@ const Profile = ({ match }) => {
                   <h4>No experience credentials</h4>
                 )}
               </div>
+            </div>
+
+            <div className='profile-github'>
+              <h2 className='text-primary my-1'>
+                <i className='fab fa-github'></i> Github Repos
+              </h2>
+              {profile.githubusername ? (
+                <ProfileGithub githubusername={profile.githubusername} />
+              ) : (
+                <h3>Please suplly your valid Github user name</h3>
+              )}
             </div>
           </div>
         </>
