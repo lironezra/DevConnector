@@ -30,6 +30,13 @@ const deletePostSuccess = (postId) => {
   };
 };
 
+const addPostSuccess = (post) => {
+  return {
+    type: actionTypes.ADD_POSTS_SUCCESS,
+    payload: post
+  };
+};
+
 // Get posts
 export const getPosts = () => async (dispatch) => {
   try {
@@ -81,6 +88,28 @@ export const removeLike = (postId) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/posts/${postId}`);
     dispatch(updateLikesSuccecss(postId, res.data));
+  } catch (err) {
+    dispatch(
+      postError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Add post
+export const addPost = (formData) => async (dispatch) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post('/api/posts', formData, config);
+    dispatch(addPostSuccess(res.data));
+    dispatch(displayAlert('Post Added', 'success'));
   } catch (err) {
     dispatch(
       postError({

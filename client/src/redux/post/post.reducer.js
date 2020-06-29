@@ -17,6 +17,12 @@ const reducer = (state = INITIAL_STATE, action) => {
         posts: payload,
         loading: false
       };
+    case actionTypes.ADD_POSTS_SUCCESS:
+      return {
+        ...state,
+        posts: [payload, ...state.posts],
+        loading: false
+      };
     case actionTypes.POST_ERROR:
       return {
         ...state,
