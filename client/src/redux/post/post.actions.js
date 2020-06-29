@@ -9,6 +9,13 @@ const getPostsSuccess = (posts) => {
   };
 };
 
+const getPostSuccess = (post) => {
+  return {
+    type: actionTypes.GET_POST_SUCCESS,
+    payload: post
+  };
+};
+
 const postError = (error) => {
   return {
     type: actionTypes.POST_ERROR,
@@ -110,6 +117,21 @@ export const addPost = (formData) => async (dispatch) => {
     const res = await axios.post('/api/posts', formData, config);
     dispatch(addPostSuccess(res.data));
     dispatch(displayAlert('Post Added', 'success'));
+  } catch (err) {
+    dispatch(
+      postError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Get post by id
+export const getPost = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`/api/posts/${id}`);
+    dispatch(getPostSuccess(res.data));
   } catch (err) {
     dispatch(
       postError({
