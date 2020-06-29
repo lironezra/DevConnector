@@ -23,6 +23,19 @@ const reducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: payload
       };
+    case actionTypes.UPDATE_LIKES_SUCCESS:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === payload.postId
+            ? {
+                ...post,
+                likes: payload.likes
+              }
+            : post
+        ),
+        loading: false
+      };
     default:
       return state;
   }
