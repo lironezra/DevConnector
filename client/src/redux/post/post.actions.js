@@ -23,6 +23,13 @@ const updateLikesSuccecss = (postId, likes) => {
   };
 };
 
+const deletePostSuccess = (postId) => {
+  return {
+    type: actionTypes.DELETE_POST_SUCCESS,
+    payload: postId
+  };
+};
+
 // Get posts
 export const getPosts = () => async (dispatch) => {
   try {
@@ -54,9 +61,25 @@ export const addLike = (postId) => async (dispatch) => {
 };
 
 // Remove like
+export const deletePost = (postId) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/posts/${postId}`);
+    dispatch(deletePostSuccess(postId));
+    dispatch(displayAlert('Post Removed', 'success'));
+  } catch (err) {
+    dispatch(
+      postError({
+        msg: err.response.statusText,
+        status: err.response.status
+      })
+    );
+  }
+};
+
+// Delete a post
 export const removeLike = (postId) => async (dispatch) => {
   try {
-    const res = await axios.put(`/api/posts/unlike/${postId}`);
+    const res = await axios.put(`/api/posts/${postId}`);
     dispatch(updateLikesSuccecss(postId, res.data));
   } catch (err) {
     dispatch(
