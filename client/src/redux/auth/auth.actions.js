@@ -24,6 +24,13 @@ const loginSuccess = (data) => {
   };
 };
 
+const oauthFacebookSuccess = (data) => {
+  return {
+    type: actionTypes.OAUTH_FACEBOOK_SUCCESS,
+    payload: data
+  };
+};
+
 const loginFail = (data) => {
   return {
     type: actionTypes.LOGIN_FAIL
@@ -59,6 +66,20 @@ export const accountDeleted = () => {
   return {
     type: actionTypes.ACCOUNT_DELETED
   };
+};
+
+// Authenticate with facebook - it will create new user if not exists
+export const oauthFacebook = (accessToken) => async (dispatch) => {
+  try {
+    const res = await axios.post('/api/users/auth/facebook', {
+      access_token: accessToken
+    });
+
+    dispatch(oauthFacebookSuccess(res.data));
+    dispatch(loadUser());
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // Load user - Get the user after getting the token from server

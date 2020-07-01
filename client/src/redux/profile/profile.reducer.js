@@ -23,7 +23,8 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         profiles: payload,
-        loading: false
+        loading: false,
+        error: null
       };
     case actionTypes.GET_REPOS_SUCCESS:
       return {
@@ -43,7 +44,8 @@ const reducer = (state = INITIAL_STATE, action) => {
         ...state,
         profile: null,
         repos: [],
-        loading: false
+        loading: false,
+        error: null
       };
     default:
       return state;

@@ -20,6 +20,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       };
     case actionTypes.REGISTER_SUCCESS:
     case actionTypes.LOGIN_SUCCES:
+    case actionTypes.OAUTH_FACEBOOK_SUCCESS:
       localStorage.setItem('token', payload.token);
       return {
         ...state,

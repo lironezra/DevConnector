@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import { login } from '../../redux/auth/auth.actions';
+import { Link, Redirect, withRouter } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login';
+import { login, oauthFacebook } from '../../redux/auth/auth.actions';
 
-const Login = () => {
+const Login = ({ history }) => {
   const inputRef = useRef(null);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -17,6 +18,12 @@ const Login = () => {
   useEffect(() => {
     inputRef.current && inputRef.current.focus();
   }, []);
+
+  const responseFacebook = async (res) => {
+    console.log('responseFacebook:', res);
+    dispatch(oauthFacebook(res.accessToken));
+    history.push('/dashboard');
+  };
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,9 +66,14 @@ const Login = () => {
         </div>
         <input type='submit' className='btn btn-primary' value='Login' />
       </form>
-      <button className='btn btn-facebook mt-10'>
-        <i className='fab fa-facebook-f mr-5'></i> Login with facebook
-      </button>
+      <FacebookLogin
+        appId='1327638704100654'
+        textButton='Login with facebook'
+        fields='name,email,picture'
+        callback={responseFacebook}
+        cssClass='btn btn-facebook mt-10'
+        icon={<i className='fab fa-facebook-f mr-5' />}
+      />
       <p className='my-1'>
         Don't have an account? <Link to='/register'>Sign Up</Link>
       </p>
@@ -69,4 +81,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withRouter(Login);
