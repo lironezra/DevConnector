@@ -31,7 +31,6 @@ passport.use(
         }
 
         // Otherwise, return the user
-        // done(null, user.local);
         done(null, user);
       } catch (err) {
         done(err, false);
@@ -95,6 +94,8 @@ passport.use(
         });
         if (existingUser) {
           // merge facebook's data with local auth
+          existingUser.methods = [...existingUser.methods, 'facebook'];
+
           existingUser.facebook = {
             id: profile.id,
             email: email
@@ -122,7 +123,6 @@ passport.use(
         });
 
         await newUser.save();
-        console.log(newUser);
         return done(null, newUser);
       } catch (err) {
         done(err, false, err.message);

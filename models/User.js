@@ -40,23 +40,23 @@ const UserSchema = mongoose.Schema({
   }
 });
 
-UserSchema.pre('save', async function (next) {
-  try {
-    if (!this.methods.includes('local')) {
-      next();
-    }
-    //Generate a salt
-    const salt = await bcrypt.genSalt(10);
+// UserSchema.pre('save', async function (next) {
+//   try {
+//     if (!this.methods.includes('local') && !this.isNew) {
+//       next();
+//     }
+//     //Generate a salt
+//     const salt = await bcrypt.genSalt(10);
 
-    // Generate password hash
-    const passwordhash = await bcrypt.hash(this.local.password, salt);
+//     // Generate password hash
+//     const passwordhash = await bcrypt.hash(this.local.password, salt);
 
-    this.local.password = passwordhash;
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
+//     this.local.password = passwordhash;
+//     next();
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 UserSchema.methods.isValidPassword = async function (newPassword) {
   try {

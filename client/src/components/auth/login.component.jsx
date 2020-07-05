@@ -20,7 +20,6 @@ const Login = ({ history }) => {
   }, []);
 
   const responseFacebook = async (res) => {
-    console.log('responseFacebook:', res);
     dispatch(oauthFacebook(res.accessToken));
     history.push('/dashboard');
   };
